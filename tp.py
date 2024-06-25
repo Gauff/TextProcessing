@@ -6,11 +6,17 @@ import text_processing
 import summarize_bullets
 import summarize_text
 import translator
+import file_management
+import transcriber
 
 
 def main_function(options):
     
-    text = text_processing.load(options.text_or_path)
+    if file_management.is_audio_file(options.text_or_path):
+        transcriber = transcriber.WhisperTranscriber(model_name='large')
+        text = transcriber.transcribe(options.text_or_path)        
+    else:
+        text = text_processing.load(options.text_or_path)
     
     if options.ebullets:
         text = summarize_bullets.extended_bullet_summary(text)
@@ -24,16 +30,19 @@ def main_function(options):
     if options.translate is not None:
         text = translator.translate(text, options.translate)
 
+    if options.output_text_file_path is not None:
+        file_management.create_text_file(text, options.output_text_file_path)
+
     print(text)
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description='tp (text processing) provides summarization')
+        description='tp (text processing) provides transcription, punctuation restoration, translation and summarization.')
     
     parser.add_argument('text_or_path', 
                         nargs='?', 
-                        help='Text to summarize or path of the text file to summarize')
+                        help='Input text OR input audio or text file path')
     
     parser.add_argument('--ebullets', '--eb', 
                         action='store_true', 
@@ -43,11 +52,16 @@ def main():
                         help='Output a condensed bullet summary')
     parser.add_argument('--text', '--t', 
                         action='store_true', 
-                        help='Output textual summary')
+                        help='Output a textual summary')
     
     parser.add_argument('--translate', '--tr', 
                         action='store', 
                         help='Language to translate to',
+                        required=False)
+    
+    parser.add_argument('--output_text_file_path', '--o',
+                        action='store',
+                        help='output text file path',
                         required=False)
     
     args = parser.parse_args()

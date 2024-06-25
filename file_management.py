@@ -3,6 +3,11 @@ import subprocess
 import tempfile
 
 
+def create_text_file(text, output_file_path):
+    with open(output_file_path, 'w', encoding='utf-8') as file:
+        file.writelines(text)
+
+
 def write_string_array_to_text_file(input_string_array, output_file_path):
     with open(output_file_path, 'w', encoding='utf-8') as file:
         for string in input_string_array:
@@ -81,3 +86,27 @@ def delete_files_in_directory(directory):
                 print(f"Deleted: {file_path}")
         except Exception as e:
             print(f"Error deleting {file_path}: {e}")
+
+
+def is_audio_file(file_path_or_text):
+    """
+    Check if the given input is a path to an audio file that Whisper accepts or just a string containing text.
+    
+    Parameters:
+    - file_path_or_text (str): Path to the file or text string to be checked.
+    
+    Returns:
+    - bool: True if the input is a supported audio file, False if it is plain text.
+    """
+    if os.path.isfile(file_path_or_text):
+        # List of supported audio file extensions
+        supported_extensions = {'.wav', '.mp3', '.m4a', '.ogg', '.flac', '.webm'}
+        
+        # Get the file extension
+        file_extension = os.path.splitext(file_path_or_text)[1].lower()
+        
+        # Check if the file extension is in the list of supported extensions
+        return file_extension in supported_extensions
+    else:
+        # The input is not a file path but a text string
+        return False
