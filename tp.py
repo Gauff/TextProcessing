@@ -5,40 +5,36 @@ import sys
 import text_processing
 import summarize_bullets
 import summarize_text
-
-
-def extended_bullet_summary(text_or_path):
-    text = text_processing.load(text_or_path)
-    return summarize_bullets.extended_bullet_summary(text)
-
-
-def condensed_bullet_summary(text_or_path):
-    text = text_processing.load(text_or_path)
-    return summarize_bullets.condensed_bullet_summary(text)
-
-
-def textual_summary(text_or_path):
-    text = text_processing.load(text_or_path)
-    return summarize_text.create_summary(text)
+import translator
 
 
 def main_function(options):
+    
+    text = text_processing.load(options.text_or_path)
+    
     if options.ebullets:
-        print(extended_bullet_summary(options.text_or_path))
+        text = summarize_bullets.extended_bullet_summary(text)
 
     if options.cbullets:
-        print(condensed_bullet_summary(options.text_or_path))
+        text = summarize_bullets.condensed_bullet_summary(text)
 
     if options.text:
-        print(textual_summary(options.text_or_path))
+        text = summarize_text.create_summary(text)
+        
+    if options.translate is not None:
+        text = translator.translate(text, options.translate)
+
+    print(text)
 
 
 def main():
     parser = argparse.ArgumentParser(
         description='tp (text processing) provides summarization')
+    
     parser.add_argument('text_or_path', 
                         nargs='?', 
                         help='Text to summarize or path of the text file to summarize')
+    
     parser.add_argument('--ebullets', '--eb', 
                         action='store_true', 
                         help='Output an extended bullet summary')
@@ -48,7 +44,12 @@ def main():
     parser.add_argument('--text', '--t', 
                         action='store_true', 
                         help='Output textual summary')
-
+    
+    parser.add_argument('--translate', '--tr', 
+                        action='store', 
+                        help='Language to translate to',
+                        required=False)
+    
     args = parser.parse_args()
 
     if args.text_or_path is None:

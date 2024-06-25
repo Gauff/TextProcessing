@@ -5,3 +5,4 @@ langchain_core
 python-dotenv
 litellm
 langdetect
+pycountry
