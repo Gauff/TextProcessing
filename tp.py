@@ -1,6 +1,7 @@
-# TP stands for Text Processing
-import argparse
+#!/usr/bin/env python3
 
+import argparse
+import sys
 import text_processing
 import summarize_bullets
 import summarize_text
@@ -35,19 +36,35 @@ def main_function(options):
 def main():
     parser = argparse.ArgumentParser(
         description='tp (text processing) provides summarization')
-    parser.add_argument('text_or_path', help='Text to summarize or path of the text file to summarize')
-    parser.add_argument('--ebullets', action='store_true', help='Output an extended bullet summary')
-    parser.add_argument('--cbullets', action='store_true', help='Output a condensed bullet summary')
-    parser.add_argument('--text', action='store_true', help='Output textual summary')
+    parser.add_argument('text_or_path', 
+                        nargs='?', 
+                        help='Text to summarize or path of the text file to summarize')
+    parser.add_argument('--ebullets', '--eb', 
+                        action='store_true', 
+                        help='Output an extended bullet summary')
+    parser.add_argument('--cbullets', '--cb', 
+                        action='store_true', 
+                        help='Output a condensed bullet summary')
+    parser.add_argument('--text', '--t', 
+                        action='store_true', 
+                        help='Output textual summary')
 
     args = parser.parse_args()
 
     if args.text_or_path is None:
-        print("Error: No text of text file path provided.")
-        return
+        # Read from stdin if no argument is provided
+        if not sys.stdin.isatty():
+            args.text_or_path = sys.stdin.read().strip()
+        else:
+            print("Error: No text or text file path provided and no input from stdin.")
+            sys.exit(1)
 
     main_function(args)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except BrokenPipeError:
+        sys.stderr.close()
+

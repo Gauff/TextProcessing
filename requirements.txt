@@ -1,6 +1,7 @@
-dotenv
 deepmultilingualpunctuation
 langchain
 langchain_community
 langchain_core
-
+python-dotenv
+litellm
+langdetect

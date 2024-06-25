@@ -3,7 +3,7 @@ def get_punctuation_percentage(text):
     if not text:
         raise ValueError("The text cannot be null or empty.")
 
-    punctuation_marks = {'.', ',', ';', ':', '!', '?', '-', '(', ')', '[', ']', '{', '}', '"', '\'', '…'}
+    punctuation_marks = {'.', ',', ';', ':', '!', '?', '-', '(', ')', '[', ']', '{', '}', '"', '…'}
     total_characters = len(text)
     punctuation_count = sum(1 for char in text if char in punctuation_marks)
 

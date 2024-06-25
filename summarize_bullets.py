@@ -23,7 +23,7 @@ def condensed_bullet_summary(text):
     bullet_summary = _bullet_summary(text)
 
     while len(bullet_summary) > environment.SMALL_CONTEXT_MAX_TOKENS:
-        bullet_summary = _bullet_summary(text)
+        bullet_summary = _bullet_summary(bullet_summary)
 
     return bullet_summary
 
