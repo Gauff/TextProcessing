@@ -75,8 +75,6 @@ def main():
 
     args = parser.parse_args()
 
-    args.input_text_or_path = "Hola familia, ¿cómo están?"
-
     if args.input_text_or_path is None:
         # Read from stdin if no argument is provided
         if not sys.stdin.isatty():
