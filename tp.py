@@ -7,10 +7,13 @@ import summarize_bullets
 import summarize_text
 import translator
 import file_management
-import transcriber
+import web
 
 
 def main_function(options):
+
+    if web.is_valid_url(options.text_or_path):
+        text = web.download_and_convert_to_md(options.text_or_path)
     
     if file_management.is_audio_file(options.text_or_path):
         transcriber = transcriber.WhisperTranscriber(model_name='large')
@@ -38,11 +41,11 @@ def main_function(options):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='tp (text processing) provides transcription, punctuation restoration, translation and summarization.')
+        description='tp (text processing) provides transcription, punctuation restoration, translation and summarization from stdin, text, url, text and audio files.')
     
     parser.add_argument('text_or_path', 
                         nargs='?', 
-                        help='Input text OR input audio or text file path')
+                        help='plain text; audio or text file path; web page url')
     
     parser.add_argument('--ebullets', '--eb', 
                         action='store_true', 

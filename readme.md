@@ -14,11 +14,14 @@ Additionally, I explored capabilities like transcripting, translating and listen
 ### Listen to the condensed summary of a long Youtube video
 `yt --transcript url | tp --cb | tts`
 
+### Read a web page summary
+`tp --ebullets https://en.wikipedia.org/wiki/Text_processing`
+
 ### Listen to the condensed French summary of a long English Youtube video
 `yt --transcript --lang en url | tp --cb --tr fr | tts`
 
 ### Save a book's wisdom as an audio file
-`tp my_book.txt --eb | fabric --p extract wisdom | tts --o my_book_wisdom.mp3` 
+`tp my_book.txt --eb | fabric --p extract_wisdom | tts --o my_book_wisdom.mp3` 
 
 ### Say "hello world!" in Chinese
 `echo "Hello world!" | tp --tr zh | tts`
@@ -36,7 +39,7 @@ Additionally, I explored capabilities like transcripting, translating and listen
 `tp es.mp3 --tr fr | tts --o fr.mp3 | tp fr.mp3 --tr en --o tr_en.txt`
 
 ### Extract ideas from an audio file, save them in a French text file
-`tp en.mp3 | fabric -- extract_ideas | tp --tr fr --o idées.txt`
+`tp en.mp3 | fabric --p extract_ideas | tp --tr fr --o idées.txt`
 
 # Text Processing (`tp`)
 
@@ -50,7 +53,7 @@ It accepts:
 
 `tp` accepts unformatted content, such as automatically generated YouTube transcripts. If the text lacks punctuation, it restores it before further processing, which is necessary for chunking and text-to-speech operations.
 
-## Transciption
+## Transcription
 
 Converts audio file to text using Whisper.
 
@@ -130,3 +133,11 @@ LITE_LLM_URI='http://localhost:4000/'
 SMALL_CONTEXT_MODEL_NAME="groq/llama3-8b-8192"
 SMALL_CONTEXT_MAX_TOKENS=8192
 ```
+
+## script short hand
+
+- Make script executable
+`chmod +x tts.py`
+
+- Create symlink : Link the script to a directory that's in your PATH
+`sudo ln -s tts.py /usr/local/bin/tts`
