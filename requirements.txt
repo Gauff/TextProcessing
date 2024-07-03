@@ -8,3 +8,10 @@ langdetect
 pycountry
 markdownify
 validators
+PyPDF2
+docx
+PIL
+ebooklib
+bs4
+textract
+moviepy

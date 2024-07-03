@@ -41,6 +41,9 @@ Additionally, I explored capabilities like transcripting, translating and listen
 ### Extract ideas from an audio file, save them in a French text file
 `tp en.mp3 | fabric --p extract_ideas | tp --tr fr --o idées.txt`
 
+### Perform OCR
+`tp image.png` 
+
 # Text Processing (`tp`)
 
 ## Input (text or audio file)
@@ -48,8 +51,7 @@ Additionally, I explored capabilities like transcripting, translating and listen
 `tp` receives from `stdin` or as first command line argument
 It accepts:
 - Text.
-- Text file path.
-- Audio file path. In this case, it uses Whisper to transcode the audio file. (/!\ slow because large model running on CPU.)
+- File path. Supported formats are: .aiff, .bmp, .cs, .csv, .doc, .docx, .eml, .epub, .flac, .gif, .htm, .html, .jpeg, .jpg, .json, .log, .md, .mkv, .mobi, .mp3, .mp4, .msg, .odt, .ogg, .pdf, .png, .pptx, .ps, .psv, .py, .rtf, .sql, .tff, .tif, .tiff, .tsv, .txt, .wav, .xls, .xlsx
 
 `tp` accepts unformatted content, such as automatically generated YouTube transcripts. If the text lacks punctuation, it restores it before further processing, which is necessary for chunking and text-to-speech operations.
 
@@ -86,10 +88,12 @@ Use two letters code such as `en` or `fr`.
 ```
 usage: tp [-h] [--ebullets] [--cbullets] [--text] [--translate TRANSLATE] [--output_text_file_path OUTPUT_TEXT_FILE_PATH] [text_or_path]
 
-tp (text processing) provides transcription, punctuation restoration, translation and summarization.
+tp (text processing) provides transcription, punctuation restoration, translation and summarization from stdin, text, url, or file path. Supported
+file formats are: .aiff, .bmp, .cs, .csv, .doc, .docx, .eml, .epub, .flac, .gif, .htm, .html, .jpeg, .jpg, .json, .log, .md, .mkv, .mobi, .mp3,
+.mp4, .msg, .odt, .ogg, .pdf, .png, .pptx, .ps, .psv, .py, .rtf, .sql, .tff, .tif, .tiff, .tsv, .txt, .wav, .xls, .xlsx
 
 positional arguments:
-  text_or_path          Input text OR input audio or text file path
+  text_or_path          plain text; audio or text file path; web page url
 
 options:
   -h, --help            show this help message and exit

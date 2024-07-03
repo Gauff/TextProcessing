@@ -1,6 +1,7 @@
 import os
 import subprocess
 import tempfile
+from pathlib import Path
 
 
 def create_text_file(text, output_file_path):
@@ -32,6 +33,31 @@ def file_exists(file_path):
     """
     return os.path.exists(file_path)
 
+
+def check_file_path(file_path: str) -> tuple:
+    """
+    Check if a given text is a valid file path and if the file exists.
+
+    Args:
+    file_path (str): The path to the file.
+
+    Returns:
+    tuple: (is_valid_path, file_exists)
+        is_valid_path (bool): True if the path is valid, False otherwise.
+        file_exists (bool): True if the file exists, False otherwise.
+    """
+    try:
+        # Check if the path is valid
+        path = Path(file_path)
+        is_valid_path = path.is_file() or path.is_dir() or not path.exists()
+
+        # Check if the file exists
+        file_exists = path.is_file()
+
+        return is_valid_path, file_exists
+    except Exception as e:
+        # If any exception occurs, the path is not valid
+        return False, False
 
 def create_temp_text_file(content):
     temp_dir = tempfile.mkdtemp()

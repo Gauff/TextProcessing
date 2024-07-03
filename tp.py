@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os
+import warnings
 import argparse
 import sys
 import text_processing
@@ -8,18 +10,35 @@ import summarize_text
 import translator
 import file_management
 import web
+import text_extractor
+
+
+# Suppress specific warnings from transformers package
+warnings.filterwarnings(
+    "ignore",
+    category=UserWarning,
+    module="token_classification"
+)
 
 
 def main_function(options):
 
+    raw_text = None
     if web.is_valid_url(options.text_or_path):
-        text = web.download_and_convert_to_md(options.text_or_path)
-    
-    if file_management.is_audio_file(options.text_or_path):
-        transcriber = transcriber.WhisperTranscriber(model_name='large')
-        text = transcriber.transcribe(options.text_or_path)        
+        raw_text = web.download_and_convert_to_md(options.text_or_path)
     else:
-        text = text_processing.load(options.text_or_path)
+        is_valid_path, file_exists = file_management.check_file_path(options.text_or_path)
+        
+        if file_exists:
+            extractor = text_extractor.UniversalTextExtractor()
+            raw_text = extractor.extract(options.text_or_path, 'md')
+        elif is_valid_path:
+            raise FileNotFoundError(f'File [{options.text_or_path}] not found')
+  
+    if raw_text is None:
+        return ""
+
+    text = text_processing.punctuate_if_needed(raw_text)
     
     if options.ebullets:
         text = summarize_bullets.extended_bullet_summary(text)
@@ -41,7 +60,7 @@ def main_function(options):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='tp (text processing) provides transcription, punctuation restoration, translation and summarization from stdin, text, url, text and audio files.')
+        description='tp (text processing) provides transcription, punctuation restoration, translation and summarization from stdin, text, url, or file path. Supported file formats are: .aiff, .bmp, .cs, .csv, .doc, .docx, .eml, .epub, .flac, .gif, .htm, .html, .jpeg, .jpg, .json, .log, .md, .mkv, .mobi, .mp3, .mp4, .msg, .odt, .ogg, .pdf, .png, .pptx, .ps, .psv, .py, .rtf, .sql, .tff, .tif, .tiff, .tsv, .txt, .wav, .xls, .xlsx')
     
     parser.add_argument('text_or_path', 
                         nargs='?', 
