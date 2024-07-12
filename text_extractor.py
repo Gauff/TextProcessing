@@ -6,7 +6,7 @@ from PIL import Image
 import textract
 import moviepy.editor as mp
 import epub_reader
-from transcriber import WhisperTranscriber
+from transcriber2 import WhisperTranscriber
 
 
 class UniversalTextExtractor:
@@ -90,7 +90,7 @@ class UniversalTextExtractor:
         return pytesseract.image_to_string(Image.open(file_path))
 
     def _extract_audio(self, file_path: str) -> str:
-        transcriber = WhisperTranscriber(model_name='large')
+        transcriber = WhisperTranscriber()
         return transcriber.transcribe(file_path)    
 
     def _extract_video(self, file_path: str) -> str:

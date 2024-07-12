@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import warnings
 import argparse
 import sys
@@ -9,7 +8,6 @@ import summarize_bullets
 import summarize_text
 import translator
 import file_management
-import web
 import text_extractor
 from file_downloader import FileDownloader
 from temporary_directory import TemporaryDirectoryManager
