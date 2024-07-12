@@ -69,7 +69,6 @@ def create_temp_text_file(content):
 
     return file_path
 
-
 def delete_temp_file(file_path):
     try:
         os.remove(file_path)
@@ -86,7 +85,6 @@ def extract_file_name(file_path):
     file_name_without_extension = file_name.split('.')[0]
 
     return file_name_without_extension
-
 
 def open_directory_in_explorer(directory_path):
     # Check if the directory path exists

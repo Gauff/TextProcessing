@@ -11,7 +11,8 @@ import translator
 import file_management
 import web
 import text_extractor
-
+from file_downloader import FileDownloader
+from temporary_directory import TemporaryDirectoryManager
 
 # Suppress specific warnings from transformers package
 warnings.filterwarnings(
@@ -23,17 +24,37 @@ warnings.filterwarnings(
 
 def main_function(options):
 
+    temporary_directory_manager = TemporaryDirectoryManager() 
+    file_path = None
     raw_text = None
-    if web.is_valid_url(options.text_or_path):
-        raw_text = web.download_and_convert_to_md(options.text_or_path)
-    else:
-        is_valid_path, file_exists = file_management.check_file_path(options.text_or_path)
+    
+    is_valid_path, file_exists = file_management.check_file_path(options.text_or_path)
+    is_url = FileDownloader.is_valid_url(options.text_or_path)
+
+    if not is_valid_path and not is_url:
+        raw_text = options.text_or_path
         
-        if file_exists:
-            extractor = text_extractor.UniversalTextExtractor()
-            raw_text = extractor.extract(options.text_or_path, 'md')
-        elif is_valid_path:
+    elif is_url:
+        url = options.text_or_path
+        
+        temporary_directory_path = temporary_directory_manager.create_temp_directory()
+        
+        file_downloader = FileDownloader(temporary_directory_path)
+        result = file_downloader.download(url)
+        
+        print(result)
+        
+        file_path = result['file_path']
+        
+    elif is_valid_path:
+        if not file_exists:
             raise FileNotFoundError(f'File [{options.text_or_path}] not found')
+        
+        file_path = options.text_or_path
+
+    if file_path is not None:
+        extractor = text_extractor.UniversalTextExtractor()
+        raw_text = extractor.extract(file_path, 'md')     
   
     if raw_text is None:
         return ""
@@ -55,6 +76,8 @@ def main_function(options):
     if options.output_text_file_path is not None:
         file_management.create_text_file(text, options.output_text_file_path)
 
+    #temporary_directory_manager.remove_temp_directory()
+
     print(text)
 
 
@@ -64,7 +87,7 @@ def main():
     
     parser.add_argument('text_or_path', 
                         nargs='?', 
-                        help='plain text; audio or text file path; web page url')
+                        help='plain text; file path; file url')
     
     parser.add_argument('--ebullets', '--eb', 
                         action='store_true', 

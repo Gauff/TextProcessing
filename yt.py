@@ -8,7 +8,6 @@ import os
 import json
 import isodate
 import argparse
-import sys
 
 
 def get_video_id(url):

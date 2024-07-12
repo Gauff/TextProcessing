@@ -35,8 +35,3 @@ def load_punctuated_text_file(path):
         text = f.read()
         text = text.replace('  ', '').replace(' ', ' ')
         return punctuate_if_needed(text)
-
-
-
-
-
