@@ -1,6 +1,8 @@
+![Screenshot](https://github.com/Gauff/TextProcessing/blob/master/icon.png))
+
 # Project Overview
 
-**TLDR; transcription, punctuation restoration, translation, summarization and text to speech**
+**TLDR; Text extraction, transcription, punctuation restoration, translation, summarization and text to speech**
 
 The goal of this project is to extend the functionalities of [Fabric](https://github.com/danielmiessler/fabric). I'm particularly interested in building pipelines using utilities like `yt` as a source and chaining them with the `|` operator in CI.
 
