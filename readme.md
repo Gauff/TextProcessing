@@ -29,8 +29,8 @@ Additionally, I explored capabilities like transcripting, translating and listen
 ### Translate a document to Spanish
 `tp doc_fr.txt --tr es > doc_es.txt`
 
-### Generate a transcript in any language from a mp3 file. E.G.: from English to French
-`tp en.mp3 --tr fr`
+### Generate a transcript in any language from a mp4 file. E.G.: from English to French
+`tp en.mp4 --tr fr`
 
 ### Listen in spanish a French audio file
 `tp fr.mp3 --tr es | tts` 
@@ -57,7 +57,7 @@ It accepts:
 
 ## Transcription
 
-Converts audio file to text using Whisper.
+Converts audio and video files to text using Whisper.
 
 ## Summarization
 
@@ -86,20 +86,20 @@ Use two letters code such as `en` or `fr`.
 
 ## Usage
 ```
-usage: tp [-h] [--ebullets] [--cbullets] [--text] [--translate TRANSLATE] [--output_text_file_path OUTPUT_TEXT_FILE_PATH] [text_or_path]
+usage: tp [-h] [--ebullets] [--cbullets] [--text] [--lang LANG] [--translate TRANSLATE] [--output_text_file_path OUTPUT_TEXT_FILE_PATH] [text_or_path]
 
-tp (text processing) provides transcription, punctuation restoration, translation and summarization from stdin, text, url, or file path. Supported
-file formats are: .aiff, .bmp, .cs, .csv, .doc, .docx, .eml, .epub, .flac, .gif, .htm, .html, .jpeg, .jpg, .json, .log, .md, .mkv, .mobi, .mp3,
-.mp4, .msg, .odt, .ogg, .pdf, .png, .pptx, .ps, .psv, .py, .rtf, .sql, .tff, .tif, .tiff, .tsv, .txt, .wav, .xls, .xlsx
+tp (text processing) provides transcription, punctuation restoration, translation and summarization from stdin, text, url, or file path. Supported file formats are: .aiff, .bmp, .cs, .csv, .doc, .docx, .eml, .epub, .flac, .gif, .htm, .html, .jpeg, .jpg, .json, .log, .md, .mkv, .mobi, .mp3, .mp4, .msg, .odt, .ogg, .pdf, .png, .pptx, .ps, .psv, .py, .rtf, .sql, .tff, .tif, .tiff, .tsv, .txt, .wav, .xls, .xlsx
 
 positional arguments:
-  text_or_path          plain text; audio or text file path; web page url
+  text_or_path          plain text; file path; file url
 
 options:
   -h, --help            show this help message and exit
   --ebullets, --eb      Output an extended bullet summary
   --cbullets, --cb      Output a condensed bullet summary
   --text, --t           Output a textual summary
+  --lang LANG, --l LANG
+                        Forced processing language. Disables the automatic detection.
   --translate TRANSLATE, --tr TRANSLATE
                         Language to translate to
   --output_text_file_path OUTPUT_TEXT_FILE_PATH, --o OUTPUT_TEXT_FILE_PATH
