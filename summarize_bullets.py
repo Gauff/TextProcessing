@@ -25,7 +25,7 @@ def condensed_bullet_summary(text, forced_language_code=None):
     bullet_summary = _bullet_summary(text, forced_language_code)
 
     while len(bullet_summary) > environment.SMALL_CONTEXT_MAX_TOKENS:
-        bullet_summary = _bullet_summary(forced_language_code)
+        bullet_summary = _bullet_summary(bullet_summary, forced_language_code)
 
     return bullet_summary
 
