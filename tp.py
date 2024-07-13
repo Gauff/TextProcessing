@@ -25,7 +25,7 @@ def main_function(options):
     temporary_directory_manager = TemporaryDirectoryManager() 
     file_path = None
     raw_text = None
-    
+        
     is_valid_path, file_exists = file_management.check_file_path(options.text_or_path)
     is_url = FileDownloader.is_valid_url(options.text_or_path)
 
@@ -59,14 +59,16 @@ def main_function(options):
 
     text = text_processing.punctuate_if_needed(raw_text)
     
+    forced_language_code = options.lang
+
     if options.ebullets:
-        text = summarize_bullets.extended_bullet_summary(text)
+        text = summarize_bullets.extended_bullet_summary(text, forced_language_code)
 
     if options.cbullets:
-        text = summarize_bullets.condensed_bullet_summary(text)
+        text = summarize_bullets.condensed_bullet_summary(text, forced_language_code)
 
     if options.text:
-        text = summarize_text.create_summary(text)
+        text = summarize_text.create_summary(text, forced_language_code)
         
     if options.translate is not None:
         text = translator.translate(text, options.translate)
@@ -83,10 +85,12 @@ def main():
     parser = argparse.ArgumentParser(
         description='tp (text processing) provides transcription, punctuation restoration, translation and summarization from stdin, text, url, or file path. Supported file formats are: .aiff, .bmp, .cs, .csv, .doc, .docx, .eml, .epub, .flac, .gif, .htm, .html, .jpeg, .jpg, .json, .log, .md, .mkv, .mobi, .mp3, .mp4, .msg, .odt, .ogg, .pdf, .png, .pptx, .ps, .psv, .py, .rtf, .sql, .tff, .tif, .tiff, .tsv, .txt, .wav, .xls, .xlsx')
     
+    # input
     parser.add_argument('text_or_path', 
                         nargs='?', 
                         help='plain text; file path; file url')
     
+    # summarize options
     parser.add_argument('--ebullets', '--eb', 
                         action='store_true', 
                         help='Output an extended bullet summary')
@@ -97,11 +101,18 @@ def main():
                         action='store_true', 
                         help='Output a textual summary')
     
+    # languages
+    parser.add_argument('--lang', '--l', 
+                        action='store', 
+                        help='Forced processing language. Disables the automatic detection.',
+                        required=False)
+    
     parser.add_argument('--translate', '--tr', 
                         action='store', 
                         help='Language to translate to',
                         required=False)
-    
+        
+    #output
     parser.add_argument('--output_text_file_path', '--o',
                         action='store',
                         help='output text file path',
