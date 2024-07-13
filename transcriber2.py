@@ -1,6 +1,6 @@
 import torch
-from transformers import pipeline
 import torchaudio
+from transformers import pipeline
 from multiprocessing import cpu_count, get_context
 
 

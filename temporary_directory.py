@@ -1,6 +1,3 @@
-import shutil
-import tempfile
-
 class TemporaryDirectoryManager:
     def __init__(self):
         self.temp_dir = None
@@ -8,12 +5,14 @@ class TemporaryDirectoryManager:
     def create_temp_directory(self):
         """Create a temporary directory and return its path."""
         if self.temp_dir is None:
+            import tempfile
             self.temp_dir = tempfile.mkdtemp()
         return self.temp_dir
 
     def remove_temp_directory(self):
         """Remove the temporary directory if it exists."""
         if self.temp_dir is not None:
+            import shutil
             shutil.rmtree(self.temp_dir)
             self.temp_dir = None
 

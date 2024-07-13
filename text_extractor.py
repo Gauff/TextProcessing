@@ -1,12 +1,4 @@
 import os
-import docx
-import PyPDF2
-import pytesseract
-from PIL import Image
-import textract
-import moviepy.editor as mp
-import epub_reader
-from transcriber2 import WhisperTranscriber
 
 
 class UniversalTextExtractor:
@@ -73,27 +65,34 @@ class UniversalTextExtractor:
             return file.read()
 
     def _extract_docx(self, file_path: str) -> str:
+        import docx
         doc = docx.Document(file_path)
         return '\n'.join([para.text for para in doc.paragraphs])
 
     def _extract_pdf(self, file_path: str) -> str:
         with open(file_path, 'rb') as file:
+            import PyPDF2
             reader = PyPDF2.PdfReader(file)
             return '\n'.join([page.extract_text() for page in reader.pages])
 
     def _extract_epub(self, file_path: str) -> str:
+        import epub_reader
         book_title, chapters_text = epub_reader.get_title_and_chapters_text(file_path)
         text = '\n\n'.join([x for x in chapters_text])
         return f'{book_title}\n\n{text}'
 
     def _extract_image(self, file_path: str) -> str:
+        from PIL import Image
+        import pytesseract
         return pytesseract.image_to_string(Image.open(file_path))
 
     def _extract_audio(self, file_path: str) -> str:
+        from transcriber2 import WhisperTranscriber
         transcriber = WhisperTranscriber()
         return transcriber.transcribe(file_path)    
 
     def _extract_video(self, file_path: str) -> str:
+        import moviepy.editor as mp
         video = mp.VideoFileClip(file_path)
         audio_path = 'temp_audio.wav'
         video.audio.write_audiofile(audio_path)
@@ -106,6 +105,7 @@ class UniversalTextExtractor:
             return file.read()
 
     def _extract_textract(self, file_path: str) -> str:
+        import textract
         return textract.process(file_path).decode('utf-8')
 
     def _output_text(self, text: str, format: str) -> str:

@@ -1,10 +1,8 @@
 import os
-import punctuation
 from text_analysis import get_punctuation_percentage
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 MINIMUM_PUNCTUATION_THRESHOLD_PERCENTAGE = 1.0
-
 
 def load(text_or_path):
     if os.path.isfile(text_or_path):
@@ -22,11 +20,12 @@ def split(text, chunk_size, chunk_overlap):
 
 # ---
 
-
 def punctuate_if_needed(text):
 
     if get_punctuation_percentage(text) < MINIMUM_PUNCTUATION_THRESHOLD_PERCENTAGE:
+        import punctuation
         return punctuation.restore(text)
+
     return text
 
 
