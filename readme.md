@@ -44,6 +44,9 @@ Additionally, I explored capabilities like transcripting, translating and listen
 ### Perform OCR
 `tp image.png` 
 
+### Extracts text from a Word file
+`tp document.docx` 
+
 # Text Processing (`tp`)
 
 ## Input (text or audio file)
