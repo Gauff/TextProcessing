@@ -1,4 +1,4 @@
-![Screenshot](https://github.com/Gauff/TextProcessing/blob/master/icon.png))
+![Icon](https://github.com/Gauff/TextProcessing/blob/master/tp_icon.png)
 
 # Project Overview
 
