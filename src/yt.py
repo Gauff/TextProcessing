@@ -2,13 +2,12 @@ import re
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from youtube_transcript_api import YouTubeTranscriptApi
-from dotenv import load_dotenv
-from datetime import datetime
 import os
 import json
 import isodate
 import argparse
-
+import environment
+import sys
 
 def get_video_id(url):
     # Extract video ID from URL
@@ -56,13 +55,10 @@ def get_comments(youtube, video_id):
     return comments
 
 
-
 def main_function(url, options):
-    # Load environment variables from .env file
-    load_dotenv(os.path.expanduser("~/.config/fabric/.env"))
 
     # Get YouTube API key from environment variable
-    api_key = os.getenv("YOUTUBE_API_KEY")
+    api_key = environment.YOUTUBE_API_KEY
     if not api_key:
         print("Error: YOUTUBE_API_KEY not found in ~/.config/fabric/.env")
         return
@@ -105,25 +101,29 @@ def main_function(url, options):
         if options.comments:
             comments = get_comments(youtube, video_id)
 
-        # Output based on options
-        if options.duration:
-            print(duration_minutes)
-        elif options.transcript:
-            print(transcript_text.encode('utf-8').decode('unicode-escape'))
-        elif options.comments:
-            print(json.dumps(comments, indent=2))
-        elif options.metadata:
-            print(json.dumps(metadata, indent=2))
-        else:
-            # Create JSON object with all data
-            output = {
-                "transcript": transcript_text,
-                "duration": duration_minutes,
-                "comments": comments,
-                "metadata": metadata
-            }
-            # Print JSON object
-            print(json.dumps(output, indent=2))
+        if sys.platform == 'win32':
+            sys.stdout.reconfigure(encoding='utf-8')
+
+            # Output based on options
+            if options.duration:
+                print(duration_minutes)
+            elif options.transcript:
+                # Direct UTF-8 print without encode/decode
+                print(transcript_text)
+            elif options.comments:
+                print(json.dumps(comments, indent=2, ensure_ascii=False))
+            elif options.metadata:
+                print(json.dumps(metadata, indent=2, ensure_ascii=False))
+            else:
+                # Create JSON object with all data
+                output = {
+                    "transcript": transcript_text,
+                    "duration": duration_minutes,
+                    "comments": comments,
+                    "metadata": metadata
+                }
+                # Print JSON object with proper UTF-8 encoding
+                print(json.dumps(output, indent=2, ensure_ascii=False))
     except HttpError as e:
         print(f"Error: Failed to access YouTube API. Please check your YOUTUBE_API_KEY and ensure it is valid: {e}")
 
